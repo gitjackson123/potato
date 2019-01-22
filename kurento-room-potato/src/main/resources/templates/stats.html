@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8"></meta>
+  <meta http-equiv="cache-control" content="no-cache"></meta>
+  <meta http-equiv="pragma" content="no-cache"></meta>
+  <meta http-equiv="expires" content="0"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+  <link rel="shortcut icon" href="img/kurento.png" type="image/png"></link>
+
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"></link>
+  <link rel="stylesheet" href="bower_components/demo-console/index.css"></link>
+  <link rel="stylesheet" href="bower_components/ekko-lightbox/dist/ekko-lightbox.min.css"></link>
+  <link rel="stylesheet" href="css/kurento.css"></link>
+  <link href="css/select2.min.css" rel="stylesheet"></link>
+
+   <script src="bower_components/jquery/dist/jquery.min.js"></script>
+   <script src="js/select2.min.js"></script>
+   <script src="js/stats.js"></script>
+  <title>Kms: WebRTC Statistics</title>
+  
+</head>
+
+<body>
+  <header>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"></button>
+          <a class="navbar-brand" href=".">Potato Kms</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Kms: WebRTC Statistics</h1>
+      <p>
+        This application shows a <i>room</i> stats. Take a look to run this project follow these steps:
+      </p>
+      <ol>
+        <li>Open this page with a browser compliant with WebRTC (Chrome, Firefox).</li>
+        <li>Click on <i>Start</i> button.</li>
+        <li>Click on <i>Stop</i> to finish the communication.</li>
+        <a href="img/kms-params.png" target="bank">kms-params</a>
+      </ol>
+    </div>
+    <div class="row">
+      <div class="col-md-5">
+       房间名称： <select class="singleSelect" name="roomName" id="roomName"  style="width:200px; height:20px;"> 
+	       			<option value="">-请选择房间-</option>
+	       			<option th:each="roomName:${rooms}" th:text="${roomName}" th:value="${roomName}"></option> 
+       			</select><br/>
+        <br/>
+        <table class="table table-condensed">
+          <tr>
+            <th>Stat1</th>
+            <th>KMS1</th>
+            <th>KMS1</th>
+          </tr>
+          <tr>
+            <td>SSRC</td>
+            <td id="browserOutgoingSsrc">--</td>
+            <td id="kmsIncomingSsrc">--</td>
+          </tr>
+          <tr>
+            <td>Bytes send </td>
+            <td id="browserBytesSent">--</td>
+            <td id="kmsBytesReceived">--</td>
+          </tr>
+          <tr>
+            <td>Packets send </td>
+            <td id="browserPacketsSent">--</td>
+            <td id="kmsPacketsReceived">--</td>
+          </tr>
+          <tr>
+            <td>PLIs received </td>
+            <td id="browserPliReceived">--</td>
+            <td id="kmsPliSent">--</td>
+          </tr>
+          <tr>
+            <td>FIRs received </td>
+            <td id="browserFirReceived">--</td>
+            <td id="kmsFirSent">--</td>
+          </tr>
+          <tr>
+            <td>NACKs received </td>
+            <td id="browserNackReceived">--</td>
+            <td id="kmsNackSent">--</td>
+          </tr>
+          <tr>
+            <td>RTT</td>
+            <td id="browserRtt">--</td>
+            <td id="kmsRtt1">--</td>
+          </tr>
+          <tr>
+            <td>Jitter</td>
+            <td id="browserJitter">--</td>
+            <td id="kmsJitter">--</td>
+          </tr>
+          <tr>
+            <td>Packets Lost</td>
+            <td id="browserOutboundPacketsLost">--</td>
+            <td id="kmsPacketsLost">--</td>
+          </tr>
+          <tr>
+            <td>Fraction lost</td>
+            <td id="browserOutboundFractionLost">--</td>
+            <td id="kmsFractionLost">--</td>
+          </tr>
+          <tr>
+            <td>REMB</td>
+            <td id="browserRembReceived">--</td>
+            <td id="kmsRembSend">--</td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-2">
+        <a id="start" href="#" class="btn btn-success">
+          <span id="start1" class="glyphicon glyphicon-play"></span> Start</a>
+        <br/>
+        <br/>
+        <a id="stop" href="javascript:void(0);" class="btn btn-danger"  onclick="stop()">
+          <span id="stop1" class="glyphicon glyphicon-stop"></span> Stop</a>
+      </div>
+      <div class="col-md-5">
+       媒体类型： <select class="singleSelect" id="type" name="type" style="width:200px; height:20px;"> 
+					<option value="0">audio</option>
+					<option value="1" selected="selected">video</option> 
+				</select> <br/>
+        <br/>
+        <table class="table table-condensed">
+           <tr>
+            <th>Stat2</th>
+            <th>KMS2</th>
+            <th>KMS2</th>
+          </tr>
+          <tr>
+            <td>SSRC</td>
+            <td id="browserOutgoingSsrc2">--</td>
+            <td id="kmsIncomingSsrc2">--</td>
+          </tr>
+          <tr>
+            <td>Bytes send </td>
+            <td id="browserBytesSent2">--</td>
+            <td id="kmsBytesReceived2">--</td>
+          </tr>
+          <tr>
+            <td>Packets send </td>
+            <td id="browserPacketsSent2">--</td>
+            <td id="kmsPacketsReceived2">--</td>
+          </tr>
+          <tr>
+            <td>PLIs received </td>
+            <td id="browserPliReceived2">--</td>
+            <td id="kmsPliSent2">--</td>
+          </tr>
+          <tr>
+            <td>FIRs received </td>
+            <td id="browserFirReceived2">--</td>
+            <td id="kmsFirSent2">--</td>
+          </tr>
+          <tr>
+            <td>NACKs received </td>
+            <td id="browserNackReceived2">--</td>
+            <td id="kmsNackSent2">--</td>
+          </tr>
+          <tr>
+            <td>RTT</td>
+            <td id="browserRtt2">--</td>
+            <td id="kmsRtt2">--</td>
+          </tr>
+          <tr>
+            <td>Jitter</td>
+            <td id="browserJitter2">--</td>
+            <td id="kmsJitter2">--</td>
+          </tr>
+          <tr>
+            <td>Packets Lost</td>
+            <td id="browserOutboundPacketsLost2">--</td>
+            <td id="kmsPacketsLost2">--</td>
+          </tr>
+          <tr>
+            <td>Fraction lost</td>
+            <td id="browserOutboundFractionLost2">--</td>
+            <td id="kmsFractionLost2">--</td>
+          </tr>
+          <tr>
+            <td>REMB</td>
+            <td id="browserRembReceived2">--</td>
+            <td id="kmsRembSend2">--</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <p> KMS1 e2e lantency:
+          <span id="e2eLatency">--</span>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p> KMS2 e2e lantency:
+          <span id="e2eLatency2">--</span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
+
